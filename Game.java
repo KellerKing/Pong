@@ -15,12 +15,12 @@ public class Game
 	private GameField gameField;
 	private static Game game;
 
-	public static final int WIDTH = 1000;
-	public static final int HEIGHT = 700;
+	public static final int WIDTH_FRAME = 1000;
+	public static final int HEIGHT_FRAME = 700;
 
 	private Random random;
-	private Paddle player1;
-	private Paddle player2;
+	private Paddle playerLeft;
+	private Paddle playerRight;
 	private Ball ball;
 
 	private byte state = 0; // 0 = Start / 1 = Game / 2 = Pause
@@ -32,7 +32,7 @@ public class Game
 		
 		gameField = new GameField(this);
 		frame = new JFrame();
-		frame.setSize(WIDTH, HEIGHT);
+		frame.setSize(WIDTH_FRAME, HEIGHT_FRAME);
 		frame.setLayout(null);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +45,7 @@ public class Game
 	
 	public void initGame()
 	{
-		ball = new Ball(WIDTH / 2, HEIGHT / 2);
+		ball = new Ball(WIDTH_FRAME / 2, HEIGHT_FRAME / 2, playerLeft, playerRight);
 	}
 	
 	public void dauerschleife()
@@ -123,13 +123,13 @@ class GameField extends JPanel implements KeyListener, ActionListener
 	private JButton spielen = new JButton("Spielen");
 	private JButton beenden = new JButton("Beenden");
 	
-	private int buttonWidth = Game.WIDTH / 7;
-	private int buttonHeight = Game.HEIGHT / 7;
+	private int buttonWidth = Game.WIDTH_FRAME / 7;
+	private int buttonHeight = Game.HEIGHT_FRAME / 7;
 
 	public GameField(Game game)
 	{
 		this.game = game;
-		this.setSize(Game.WIDTH, Game.HEIGHT);
+		this.setSize(Game.WIDTH_FRAME, Game.HEIGHT_FRAME);
 		this.setLayout(null);
 		this.setFocusable(true);
 		this.requestFocus();
@@ -146,8 +146,8 @@ class GameField extends JPanel implements KeyListener, ActionListener
 	
 	public void initComp()
 	{
-		spielen.setBounds((Game.WIDTH / 2) - (buttonWidth / 2), (Game.HEIGHT / 3) - (buttonHeight / 2), buttonWidth, buttonHeight);
-		beenden.setBounds((Game.WIDTH / 2) - (buttonWidth / 2), (Game.HEIGHT / 2) - (buttonHeight / 2), buttonWidth, buttonHeight);
+		spielen.setBounds((Game.WIDTH_FRAME / 2) - (buttonWidth / 2), (Game.HEIGHT_FRAME / 3) - (buttonHeight / 2), buttonWidth, buttonHeight);
+		beenden.setBounds((Game.WIDTH_FRAME / 2) - (buttonWidth / 2), (Game.HEIGHT_FRAME / 2) - (buttonHeight / 2), buttonWidth, buttonHeight);
 		
 		
 		spielen.addActionListener(this);
