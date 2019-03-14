@@ -13,14 +13,14 @@ public class StateMenue extends State
 	public void stateOn()
 	{
 		panelMenue.setVisible(true);
-		game.getFrame().setContentPane(panelMenue);
+		game.getFrame().add(panelMenue);
 	}
 
 	@Override
 	public void stateOff()
 	{
 		panelMenue.setVisible(false);
-		game.getFrame().removeAll();
+		game.getFrame().remove(panelMenue);
 	}
 
 	@Override

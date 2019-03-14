@@ -10,12 +10,13 @@ public class Game extends Thread
 	private final static double FPS = 60;
 	private final static double FRAMETIME = (1 / FPS) * 1000000000; // nanosekunden
 	
+	private JFrame frame = new JFrame();
+	
 	private GameStateManager gsm = new GameStateManager(this);
 	
 	
 	public Game() throws InterruptedException
 	{
-		JFrame frame = new JFrame();
 		frame.setSize(GAME_HEIGHT_WIDTH, GAME_HEIGHT_WIDTH);
 		frame.setLayout(null);
 		frame.setLocationRelativeTo(null);
@@ -49,6 +50,7 @@ public class Game extends Thread
 
 			update();
 			render();
+			System.out.println(gsm.getState());
 
 			frameEnd = System.nanoTime();
 			frameDuration = frameEnd - frameStart;
@@ -76,10 +78,13 @@ public class Game extends Thread
 	{
 		return gsm;
 	}
+
 	public JFrame getFrame()
 	{
-		return getFrame();
+		return frame;
 	}
+
+	
 	
 
 }

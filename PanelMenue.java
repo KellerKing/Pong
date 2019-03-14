@@ -10,7 +10,6 @@ public class PanelMenue extends JPanel implements ActionListener
 	private int btnSizeW = 100;
 	private int btnSizeH = 75;
 	
-	private Graphics g = this.getGraphics();
 	private JButton spielen = new JButton("Spielen");
 	private JButton beenden = new JButton("Beenden");
 	
@@ -20,14 +19,19 @@ public class PanelMenue extends JPanel implements ActionListener
 	
 	public PanelMenue()
 	{
+		this.setSize(Game.GAME_HEIGHT_WIDTH, Game.GAME_HEIGHT_WIDTH);
+		this.setLayout(null);
 		initMenuePanel();
 	}
 	
 	public void initMenuePanel()
 	{
-		spielen.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - btnSizeH /2, btnSizeW, btnSizeH);
-		beenden.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - btnSizeH, btnSizeW, btnSizeH);
-		this.add(spielen, beenden);	
+		spielen.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - btnSizeH*4 /2, btnSizeW, btnSizeH);
+		beenden.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - btnSizeH/3, btnSizeW, btnSizeH);
+		
+		this.add(spielen);
+		this.add(beenden);
+		
 		spielen.addActionListener(this);
 		beenden.addActionListener(this);
 	}
