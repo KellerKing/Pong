@@ -1,257 +1,85 @@
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-public class Game
+public class Game extends Thread
 {
-	private JFrame frame;
-	private GameField gameField;
-	private static Game game;
-
-	public static final int WIDTH_FRAME = 1000;
-	public static final int HEIGHT_FRAME = 700;
-
-	private Random random;
-	private Paddle playerLeft;
-	private Paddle playerRight;
-	private Ball ball;
-
-	private byte state = 0; // 0 = Start / 1 = Game / 2 = Pause
 	
-	boolean running = true;
-
-	public Game()
-	{	
-		
-		gameField = new GameField(this);
-		frame = new JFrame();
-		frame.setSize(WIDTH_FRAME, HEIGHT_FRAME);
+	public static final int GAME_HEIGHT_WIDTH = 1000;
+	public static boolean leuft = true;
+	private final static double FPS = 60;
+	private final static double FRAMETIME = (1 / FPS) * 1000000000; // nanosekunden
+	
+	private GameStateManager gsm = new GameStateManager(this);
+	
+	
+	public Game() throws InterruptedException
+	{
+		JFrame frame = new JFrame();
+		frame.setSize(GAME_HEIGHT_WIDTH, GAME_HEIGHT_WIDTH);
 		frame.setLayout(null);
 		frame.setLocationRelativeTo(null);
+		frame.setResizable(false);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add(gameField);
-
+		
 		frame.setVisible(true);
-		dauerschleife();
-
+		
+		gsm.setState(GameStateManager.STATE_MENUE);
+		
+		loop();
 	}
 	
-	public void initGame()
-	{
-		ball = new Ball(WIDTH_FRAME / 2, HEIGHT_FRAME / 2, playerLeft, playerRight);
+	public static void main(String[] argv) throws InterruptedException
+	{	
+		new Game();
 	}
 	
-	public void dauerschleife()
+	public void loop() throws InterruptedException
 	{
-		
-		
-		long timeInit = System.nanoTime(); 
-		final int FPS = 60;
-		final long DELAY_TIME = 1000000000 / FPS;
-		
-		double delta = 0;
-		int frames = 0;
-		
-		long timer = System.currentTimeMillis();
+		long frameStart;
+		long frameEnd;
+		long frameDuration;
+		long sleepTime; // Nanosekunden
 
-		while(running)
+		// GameLoop mit festeingestellten 60 FPS
+		while (leuft)
 		{
-			long timeNow = System.nanoTime();
-			delta += (timeNow - timeInit) / DELAY_TIME;
-			timeInit = timeNow;
-			
-			while(delta >= 1)
-			{
-				update();
-				
-				delta--;
-				frames++;
-			}
+			frameStart = System.nanoTime();
+
+			update();
 			render();
-			
-			if(System.currentTimeMillis() - timer > 1000)
+
+			frameEnd = System.nanoTime();
+			frameDuration = frameEnd - frameStart;
+
+			while (frameDuration < FRAMETIME)
 			{
-				timer += 1000;
-				frames = 0;
+				sleepTime = (long) ((FRAMETIME - frameDuration) / 1000000);
+				sleep(sleepTime);
+				frameDuration = System.nanoTime() - frameStart;
 			}
+			yield();
 		}
 		System.exit(1);
 	}
-
-	public void render()
-	{
-		System.out.println(this.state);
-		gameField.revalidate();
-		gameField.repaint();
-	}
-
+	
 	public void update()
 	{
-
+		gsm.getState().update();
 	}
-
-	public static void main(String[] args)
+	public void render()
 	{
-		game = new Game();
+		gsm.getState().render();
 	}
-
-
-	public byte getState()
+	public GameStateManager getGSM()
 	{
-		return state;
-
+		return gsm;
 	}
-
-	public void setState(byte state)
+	public JFrame getFrame()
 	{
-		this.state = state;
-	}
-
-}
-
-class GameField extends JPanel implements KeyListener, ActionListener
-{
-	private Game game;
-	
-	private JButton spielen = new JButton("Spielen");
-	private JButton beenden = new JButton("Beenden");
-	
-	private int buttonWidth = Game.WIDTH_FRAME / 7;
-	private int buttonHeight = Game.HEIGHT_FRAME / 7;
-
-	public GameField(Game game)
-	{
-		this.game = game;
-		this.setSize(Game.WIDTH_FRAME, Game.HEIGHT_FRAME);
-		this.setLayout(null);
-		this.setFocusable(true);
-		this.requestFocus();
-		this.addKeyListener(this);
-		
-		initComp();
-		
-		
-		
-		this.setVisible(true);
-		
-		
+		return getFrame();
 	}
 	
-	public void initComp()
-	{
-		spielen.setBounds((Game.WIDTH_FRAME / 2) - (buttonWidth / 2), (Game.HEIGHT_FRAME / 3) - (buttonHeight / 2), buttonWidth, buttonHeight);
-		beenden.setBounds((Game.WIDTH_FRAME / 2) - (buttonWidth / 2), (Game.HEIGHT_FRAME / 2) - (buttonHeight / 2), buttonWidth, buttonHeight);
-		
-		
-		spielen.addActionListener(this);
-		beenden.addActionListener(this);
-		
-		this.add(spielen);
-		this.add(beenden);
-	}
-
-	@Override
-	protected void paintComponent(Graphics g)
-	{
-		switch (game.getState())
-		{
-		case 0:
-			spielen.setVisible(true);
-			beenden.setVisible(true);
-			
-			break;
-		case 1:
-			spielen.setVisible(false);
-			spielen.setVisible(false);
-			
-			paintBall(g);
-			paintPaddle(g);
-			
-			break;
-		case 2:
-			break;
-		default:
-			break;
-		}
-
-
-	}
-
-	public void paintBall(Graphics g)
-	{
-		
-	}
-
-	public void paintPaddle(Graphics g)
-	{
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == spielen)
-		{
-			game.setState((byte)1);
-			
-		}
-		else if (e.getSource() == beenden)
-		{
-			
-			game.running = false;
-		}
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-		switch (game.getState())
-		{
-		case 0:
-
-			break;
-		case 1:
-			if (e.getKeyCode() == KeyEvent.VK_UP)
-			{
-
-			} else if (e.getKeyCode() == KeyEvent.VK_DOWN)
-			{
-
-			} else if (e.getKeyCode() == KeyEvent.VK_ESCAPE)
-			{
-				game.setState((byte) 2);
-			}
-			break;
-		case 2:
-			// TODO KeyEvent
-			break;
-
-		default:
-			break;
-		}
-		this.repaint();
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
 
 }

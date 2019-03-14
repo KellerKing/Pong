@@ -1,46 +1,66 @@
-import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Paddle
+public class Paddle implements KeyListener
 {
-	private int x;
-	private int y;
-
-	private final int SPEED = 3;
-	private final int WIDTH_PADDLE = Game.WIDTH_FRAME / 15;
-	private final int HEIGHT_PADDLE = Game.HEIGHT_FRAME / 10;
-
-	public Paddle(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-
-	public void updatePosition()
-	{
-	}
-
-	public Rectangle getBounds()
-	{
-		return new Rectangle(x, y, WIDTH_PADDLE, HEIGHT_PADDLE);
-	}
+	private boolean up = false,
+					down = false,
+					left = false,
+					right = false;
 	
-	public int getX()
+	private int paddleWidth,
+				paddleHeight,
+				paddleX,
+				paddleY,
+				paddleSpeed;
+	@Override
+	public void keyPressed(KeyEvent e)
 	{
-		return x;
+		if (e.getKeyCode() == KeyEvent.VK_W)
+		{
+			up = true;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_S)
+		{
+			down = true;
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_A)
+		{
+			left = true;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_D)
+		{
+			right = true;
+		}
 	}
-	public int getY()
+
+	@Override
+	public void keyReleased(KeyEvent e)
 	{
-		return y;
+		if (e.getKeyCode() == KeyEvent.VK_W)
+		{
+			up = false;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_S)
+		{
+			down = false;
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_A)
+		{
+			left = false;
+		}
+		else if (e.getKeyCode() == KeyEvent.VK_D)
+		{
+			right = false;
+		}
 	}
-	
-	public int getWIDTH_PADDLE()
+
+	@Override
+	public void keyTyped(KeyEvent e)
 	{
-		return WIDTH_PADDLE;
+		
 	}
-	public int getHEIGHT_PADDLE()
-	{
-		return HEIGHT_PADDLE;
-	}
-	
 
 }
