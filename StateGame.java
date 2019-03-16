@@ -1,18 +1,19 @@
 
 public class StateGame extends State
 {
-	private PanelGame panelGame = new PanelGame();
+	private PanelGame panelGame;
 	
 	public StateGame(Game game)
 	{
 		super(game);
-		// TODO Auto-generated constructor stub
+		panelGame = new PanelGame(game);
 	}
 
 	@Override
 	public void stateOn()
 	{
 		game.getFrame().add(panelGame);
+		panelGame.requestFocus();
 		panelGame.setVisible(true);
 	}
 

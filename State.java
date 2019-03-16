@@ -3,7 +3,8 @@ import java.awt.Graphics;
 public abstract class State
 {
 	protected Game game;
-	
+	protected Sprite sprites[];
+
 	public State(Game game)
 	{
 		this.game = game;
