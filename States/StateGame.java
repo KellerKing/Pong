@@ -7,6 +7,7 @@ package States;
 import MiscMain.Game;
 import Panels.PanelGame;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class StateGame extends State
@@ -16,12 +17,15 @@ public class StateGame extends State
 	public StateGame(Game game)
 	{
 		super(game);
-		panelGame = new PanelGame(game);
+
 	}
 
 	@Override
 	public void stateOn()
 	{
+		if(panelGame == null)
+			panelGame = new PanelGame(game);
+
 		game.getFrame().add(panelGame);
 		panelGame.requestFocus();
 		panelGame.setVisible(true);
@@ -46,16 +50,5 @@ public class StateGame extends State
 		panelGame.render();
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
-
-	}
 
 }

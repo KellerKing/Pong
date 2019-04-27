@@ -22,7 +22,5 @@ public abstract class State
 	public abstract void stateOff();
 	public abstract void update();
 	public abstract void render();
-	public abstract void keyPressed(KeyEvent e);
-	public abstract void keyReleased(KeyEvent e);
 	
 }

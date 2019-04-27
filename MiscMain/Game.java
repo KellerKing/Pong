@@ -5,13 +5,19 @@
 package MiscMain;
 
 import GameObjects.Ball;
+import GameObjects.Ki;
 import GameObjects.Paddle;
 import States.GameStateManager;
 
 import javax.swing.JFrame;
+import java.util.Random;
 
 public class Game extends Thread
 {
+
+  private Random r = new Random();
+
+  private Settings settings = new Settings(); //TODO
 
   public static final int GAME_HEIGHT_WIDTH = 1000;
   public static boolean leuft = true;
@@ -19,9 +25,9 @@ public class Game extends Thread
   private final static double FRAMETIME = (1 / FPS) * 1000000000; // nanosekunden
 
   //TODO
-  private Paddle player1 = new Paddle(50,50,50,50);
-  private Paddle player2 = new Paddle(10,10,10,10);
-  private Ball ball = new Ball(100,100,100,100);
+  private Paddle player1 = new Paddle(GAME_HEIGHT_WIDTH/2 - 100,GAME_HEIGHT_WIDTH - 100,200,50);
+  private Paddle player2 = new Ki(GAME_HEIGHT_WIDTH/2 - 100, 15,200,50);
+  private Ball ball = new Ball(GAME_HEIGHT_WIDTH / 2 - 50,GAME_HEIGHT_WIDTH/2 -50,50,50);
 
   private JFrame frame = new JFrame();
 
@@ -30,6 +36,7 @@ public class Game extends Thread
 
   public Game() throws InterruptedException
   {
+    frame.setTitle("Pong by Luca Keller");
     frame.setSize(GAME_HEIGHT_WIDTH, GAME_HEIGHT_WIDTH);
     frame.setLayout(null);
     frame.setLocationRelativeTo(null);
@@ -62,7 +69,6 @@ public class Game extends Thread
 
       update();
       render();
-      System.out.println(gsm.getState());
 
       frameEnd = System.nanoTime();
       frameDuration = frameEnd - frameStart;
@@ -74,7 +80,7 @@ public class Game extends Thread
       }
       yield();
     }
-    System.exit(1);
+    System.exit(0);
   }
 
   public void update()
@@ -82,7 +88,7 @@ public class Game extends Thread
     gsm.getState().update();
   }
 
-  public void render()
+    public void render()
   {
     gsm.getState().render();
   }

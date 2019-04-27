@@ -10,7 +10,7 @@ import Panels.*;
 
 public class StateMenue extends State
 {
-	private PanelMenue panelMenue = new PanelMenue();
+	private PanelMenue panelMenue;
 	
 	public StateMenue(Game game)
 	{
@@ -20,6 +20,9 @@ public class StateMenue extends State
 	@Override
 	public void stateOn()
 	{
+		if (panelMenue == null)
+			panelMenue = new PanelMenue();
+
 		panelMenue.setVisible(true);
 		game.getFrame().add(panelMenue);
 	}
@@ -51,16 +54,5 @@ public class StateMenue extends State
 		panelMenue.render();
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e)
-	{
-
-	}
 
 }

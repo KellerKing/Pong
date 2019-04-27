@@ -13,26 +13,36 @@ import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.*;
 
 import javax.swing.JPanel;
 
 public class PanelGame extends JPanel implements KeyListener
 {
-  private Paddle player1;
-  private Paddle player2;
+
+  private Paddle[] player = new Paddle[2];
+
   private Ball ball;
 
   private Game game;
 
+  private Timer timer;
+
+  private long timerSek = 3;
+
   public PanelGame(Game game)
   {
     this.game = game;
-    player1 = game.getPlayer1();
-    player2 = game.getPlayer2();
     ball = game.getBall();
 
-    this.setSize(Game.GAME_HEIGHT_WIDTH, Game.GAME_HEIGHT_WIDTH);
-    this.setLayout(null);
+    player[0] = game.getPlayer1();
+    player[1] = game.getPlayer2();
+
+    player[0].setBall(ball);
+    player[1].setBall(ball);
+
+    timer = new Timer(); //TODO
+
 
     initPanelGame();
   }
@@ -40,28 +50,68 @@ public class PanelGame extends JPanel implements KeyListener
   public void initPanelGame()
   {
 
+    this.setSize(Game.GAME_HEIGHT_WIDTH, Game.GAME_HEIGHT_WIDTH);
+    this.setLayout(null);
+
+    this.addKeyListener(this);
   }
 
   public void render()
   {
-    this.revalidate();
     this.repaint();
   }
 
   public void update()
   {
-    player1.move();
-    player1.updatePosition();
+    int direction = 0; // Richtung die der Ball sich bewegen soll
+
+    //Wenn ein Punkt gemacht wird
+    for(int i = 0; i < player.length; i++)
+    {
+      if(ball.loosePlayer(player[i]))
+      {
+        player[i].incrementScore();
+        ball.start();
+        player[0].start();
+        player[1].start();
+      }
+    }
+
+    if (ball.checkBorderColission() == true)
+    {
+      direction = 3;
+    }
+
+     else if (ball.checkPaddleColission(player[0]) == true) //Unterer Player
+    {
+
+      direction = 1;
+    }
+
+     else if (ball.checkPaddleColission(player[1]) == true) // Oberer Player
+    {
+      direction = 2;
+    }
+
+
+    player[0].updatePosition();
+    player[1].updatePosition();
+    ball.updatePosition(direction);
+    player[0].move();
+    player[1].move();
+    ball.move();
+
+
+
   }
 
   @Override
   public void paint(Graphics g)
   {
-    g.clearRect(0,0, Game.GAME_HEIGHT_WIDTH, Game.GAME_HEIGHT_WIDTH);
-    player1.draw(g);
-    player2.draw(g);
+    super.paint(g);
+    player[0].draw(g);
+    player[1].draw(g);
     ball.draw(g);
-    System.out.println("Hier");
   }
 
   @Override
@@ -73,42 +123,28 @@ public class PanelGame extends JPanel implements KeyListener
   @Override
   public void keyPressed(KeyEvent keyEvent)
   {
-    if (keyEvent.getKeyCode() == KeyEvent.VK_A)
-    {
-      player1.setLeft(true);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_D)
-    {
-      player1.setRight(true);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player2 instanceof Paddle)
-    {
-      player2.setLeft(true);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player2 instanceof Paddle)
-    {
-      player2.setRight(true);
+    if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+      player[0].setLeft(true);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_D) {
+      player[0].setRight(true);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle) {
+      player[1].setLeft(true);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle) {
+      player[1].setRight(true);
     }
   }
 
   @Override
   public void keyReleased(KeyEvent keyEvent)
   {
-    if (keyEvent.getKeyCode() == KeyEvent.VK_A)
-    {
-      player1.setLeft(false);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_D)
-    {
-      player1.setRight(false);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player2 instanceof Paddle)
-    {
-      player2.setLeft(false);
-    }
-    else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player2 instanceof Paddle)
-    {
-      player2.setRight(false);
+    if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+      player[0].setLeft(false);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_D) {
+      player[0].setRight(false);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle) {
+      player[1].setLeft(false);
+    } else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle) {
+      player[1].setRight(false);
     }
   }
 }
