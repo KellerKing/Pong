@@ -4,6 +4,8 @@
 
 package GameObjects;
 
+import MiscMain.Game;
+
 import java.awt.*;
 import java.awt.event.KeyListener;
 
@@ -30,7 +32,10 @@ public abstract class Sprite
     return new Rectangle(x, y, height, height);
   }
 
-  public abstract void updatePosition();
+  public void updatePosition()
+  {}
+
+  public void updatePosition(int direction){}
 
   public int getX()
   {
@@ -54,8 +59,16 @@ public abstract class Sprite
 
   public abstract void draw(Graphics g);
 
-  public abstract void checkColission();
+  public void move()
+  {
+    x += (vx * speed);
+    y += (vy * speed);
+  }
 
-  public abstract void move();
+  public void start()
+  {
+    this.x = Game.GAME_HEIGHT_WIDTH / 2 - this.width / 2;
+  }
+
 
 }
