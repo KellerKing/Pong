@@ -8,14 +8,12 @@ import GameObjects.Ball;
 import GameObjects.Paddle;
 import MiscMain.Game;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.KeyAdapter;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.*;
-
-import javax.swing.JPanel;
+import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class PanelGame extends JPanel implements KeyListener
 {
@@ -71,9 +69,19 @@ public class PanelGame extends JPanel implements KeyListener
       if(ball.loosePlayer(player[i]))
       {
         player[i].incrementScore();
-        ball.start();
         player[0].start();
         player[1].start();
+        ball.start();
+        repaint();
+
+        //Delay 3 Seconds
+        try {
+          TimeUnit.SECONDS.sleep(2);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
       }
     }
 
@@ -101,8 +109,6 @@ public class PanelGame extends JPanel implements KeyListener
     player[1].move();
     ball.move();
 
-
-
   }
 
   @Override
@@ -110,6 +116,8 @@ public class PanelGame extends JPanel implements KeyListener
   {
     super.paint(g);
     player[0].draw(g);
+    player[0].drawScore(g); //TODO
+    player[1].drawScore(g);
     player[1].draw(g);
     ball.draw(g);
   }

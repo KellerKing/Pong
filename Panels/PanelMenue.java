@@ -3,16 +3,13 @@
  */
 
 package Panels;
-import MiscMain.*;
+import MiscMain.Game;
 
-import java.awt.Graphics;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
-public class PanelMenue extends JPanel implements ActionListener
+public class PanelMenue extends JPanel implements ActionListener //TODO booleans müssen später false werden,
 {
   private int btnSizeW = 100;
   private int btnSizeH = 75;
@@ -92,4 +89,10 @@ public class PanelMenue extends JPanel implements ActionListener
     return config;
   }
 
+  public void resetBoolean()//Resets the boolean for jumping back to this panel
+  {
+    starten = false;
+    stoppen = false;
+    config = false;
+  }
 }
