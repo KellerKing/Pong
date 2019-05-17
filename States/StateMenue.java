@@ -4,9 +4,8 @@
 
 package States;
 
-import java.awt.event.KeyEvent;
-import MiscMain.*;
-import Panels.*;
+import MiscMain.Game;
+import Panels.PanelMenue;
 
 public class StateMenue extends State
 {
@@ -43,10 +42,15 @@ public class StateMenue extends State
 		{
 			game.getGSM().setState(GameStateManager.STATE_GAME);
 		}
+		else if(panelMenue.getConfig() == true)
+		{
+			game.getGSM().setState(GameStateManager.STATE_SETTINGS);
+		}
 		else if(panelMenue.getStoppen() == true && panelMenue.getStarten() == false)
 		{
 			game.leuft = false;
 		}
+		panelMenue.resetBoolean();
 	}
 
 	public void render()

@@ -18,7 +18,7 @@ public class StateSettings extends State
   public void stateOn()
   {
     if(panelSettings == null)
-      panelSettings = new PanelSettings();
+      panelSettings = new PanelSettings(game);
 
     panelSettings.setVisible(true);
     game.getFrame().add(panelSettings);
@@ -35,12 +35,20 @@ public class StateSettings extends State
   @Override
   public void update()
   {
+    panelSettings.update();
 
+    if (panelSettings.getBack() == true)
+    {
+      game.getGSM().setState(GameStateManager.STATE_MENUE);
+      panelSettings.setBack(false);
+    }
   }
 
   @Override
   public void render()
   {
-
+    panelSettings.render();
   }
 }
+
+
