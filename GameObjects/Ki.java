@@ -7,12 +7,10 @@ package GameObjects;
 import MiscMain.Game;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.util.*;
 
 public class Ki extends Paddle
 {
-  private double speed = 3;
+  private double speed = 7;
   private int durlauf = 0;
 
   public Ki(int x, int y, int width, int height)
@@ -27,39 +25,50 @@ public class Ki extends Paddle
   }
 
   @Override
-  public void updatePosition() //TODO PRIO
+  public void updatePosition()
   {
-    if(durlauf %2 == 0) // Damit Ki etwas "dümmer" wird
+    if(x > 0 && x + width < Game.GAME_HEIGHT_WIDTH)
     {
-      if(ball.getY() <= Game.GAME_HEIGHT_WIDTH / 2)
+      if (ball.getY() <= Game.GAME_HEIGHT_WIDTH / 2) // Reagiert erst ab der Mitte
       {
-        if(ball.getX() + ball.width / 2 > this.x + this.width)
-        {
-          //Jetzt muss Paddle nach Rechts
-          vx = (int)speed;
-        }
-        else if(ball.getX() < this.x - width /2)
-        {
-          //Jetzt Links
-          vx = (int)-speed;
+        if (x > 0 && x + width < Game.GAME_HEIGHT_WIDTH) {
+          if (ball.getX() > x && ball.getX() + ball.width < x + width) {
+
+            vx = 0;
+
+            //Ki Dont need to move
+          }
+          else if (ball.getX() < x) //Move Left
+          {
+            vx = (int) - speed;
+
+          } else if (ball.getX() > x + width) //Move Right
+          {
+            vx = (int) speed;
+          }
+
         }
       }
-      durlauf++;
-
-    }
-    else
-    {
-      speed += 0.02;
-      vx = 0;
-      durlauf = 0;
+    } else  {
+      if (x + width >= Game.GAME_HEIGHT_WIDTH)
+      {
+        vx = -1;
+      }
+      else if (x <= 0 )
+      {
+        vx = 1;
+      }
+      else
+        {
+        vx = 0;
+      }
     }
 
   }
-
   @Override
   public void move() //TODO Superklasse verbessern
   {
-
+    super.move();
   }
 
   @Override

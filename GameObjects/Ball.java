@@ -7,14 +7,12 @@ package GameObjects;
 import MiscMain.Game;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Ball extends Sprite
 {
   private int treffer = 0;
-  private int speed = 3;
+  private int speed = 2;
   private double angle;
 
   Random r = new Random();
@@ -59,13 +57,11 @@ public class Ball extends Sprite
     {
       if(y + width >= Game.GAME_HEIGHT_WIDTH)
       {
-
        return true;
       }
 
       else
       {
-
         return false;
       }
     }
@@ -126,15 +122,6 @@ public class Ball extends Sprite
     if (vy == 0)
     {
       vy = 1;
-    }
-
-    //Delay 3 Seconds
-    try {
-      TimeUnit.SECONDS.sleep(3);
-    }
-    catch (InterruptedException e)
-    {
-      e.printStackTrace();
     }
   }
 

@@ -7,8 +7,6 @@ package GameObjects;
 import MiscMain.Game;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class Paddle extends Sprite
 {
@@ -48,30 +46,39 @@ public class Paddle extends Sprite
   @Override
   public void updatePosition() //TODO vereinfachen
   {
-
-    if (vx < 0) {
-      if (x <= 0) {
-        vx = 0;
-      } else if (x + vx < 0) {
-        vx = 0 - x;
-      }
-
-    }
-    if (vx > 0) {
-      if (x + width >= Game.GAME_HEIGHT_WIDTH) {
-        vx = 0;
-      } else if (x + width + vx >= Game.GAME_HEIGHT_WIDTH) {
-        vx = Game.GAME_HEIGHT_WIDTH - (x + width);
-      }
-
-    }
-
     if (left == true) {
       vx = -speed;
 
     } else if (right == true) {
       vx = speed;
     }
+    else
+    {
+      vx = 0;
+    }
+
+   if (vx < 0) { //Das Linker Rand nicht verlassen wird.
+      if (x <= 0) {
+        vx = 0;
+      } else if (x + vx < 0) {
+        vx = 0 - x;
+      }
+    }
+
+
+    if (vx > 0) {
+      if (x + width >= Game.GAME_HEIGHT_WIDTH) { // Right Border
+        vx = 0;
+      }
+      else if (x + width + vx >= Game.GAME_HEIGHT_WIDTH) // Left Border
+      {
+        vx = Game.GAME_HEIGHT_WIDTH - (x + width);
+      }
+    }
+  }
+
+  public void drawScore(Graphics g)
+  {
 
   }
 
