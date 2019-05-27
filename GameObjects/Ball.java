@@ -13,7 +13,7 @@ public class Ball extends Sprite
 {
   private int treffer = 0;
   private int speed = 2;
-  private double angle;
+
 
   Random r = new Random();
 
@@ -26,7 +26,8 @@ public class Ball extends Sprite
   @Override
   public void updatePosition(int direction)
   {
-    switch (direction) {
+    switch (direction)
+    {
       case 1:
         vx = -(treffer / 2);
         vy = -(treffer / 2);
@@ -37,7 +38,8 @@ public class Ball extends Sprite
         vy = (treffer / 2);
         break;
     }
-    if (direction == 3) {
+    if (direction == 3)
+    {
       vx = -vx;
     }
 
@@ -51,53 +53,39 @@ public class Ball extends Sprite
   }
 
 
-  public boolean loosePlayer(Paddle a) //TODO kann vereinfacht werden.
+  public boolean loosePlayer() //TODO kann vereinfacht werden.
   {
-    if (a.getY() > Game.GAME_HEIGHT_WIDTH / 2) // Unterer Spieler
+    if (y + width >= Game.GAME_HEIGHT_WIDTH || y <= 0)
     {
-      if(y + width >= Game.GAME_HEIGHT_WIDTH)
-      {
-       return true;
-      }
-
-      else
-      {
-        return false;
-      }
+      return true;
     }
-    else if(a.getY() < Game.GAME_HEIGHT_WIDTH / 2) // Oberer Spieler
+    else
     {
-      if( y <= 0)
-      {
-
-        return true;
-      }
-
-      else
-      {
-
-        return false;
-      }
+      return false;
     }
-
-    return false;
   }
 
   public boolean checkPaddleColission(Paddle a)
   {
-    if (x < a.getX() + a.getWidth() && x + width > a.getX() && y < a.getY() + a.getHeight() && y + height > a.getY()) {
+    if (x < a.getX() + a.getWidth() && x + width > a.getX() && y < a.getY() + a.getHeight() && y + height > a.getY())
+    {
       treffer++;
       return true;
-    } else {
+    }
+    else
+    {
       return false;
     }
   }
 
   public boolean checkBorderColission()
   {
-    if (x + width > Game.GAME_HEIGHT_WIDTH || x <= 0) {
+    if (x + width > Game.GAME_HEIGHT_WIDTH || x <= 0)
+    {
       return true;
-    } else {
+    }
+    else
+    {
       return false;
     }
   }
@@ -119,6 +107,7 @@ public class Ball extends Sprite
 
     //(max + 1 - min) + min ---> inclusve betweeen values
     vy = r.nextInt(2 + 1 + 2) - 2;
+
     if (vy == 0)
     {
       vy = 1;

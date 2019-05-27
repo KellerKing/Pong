@@ -6,27 +6,23 @@ package Panels;
 
 import GameObjects.Ball;
 import GameObjects.Paddle;
+import MiscMain.Countdown;
 import MiscMain.Game;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
 
 public class PanelGame extends JPanel implements KeyListener
 {
 
   private Paddle[] player = new Paddle[2];
-
   private Ball ball;
-
   private Game game;
 
-  private Timer timer;
-
-  private long timerSek = 3;
+  private int countdownTime = 3; //Seconds
+  private Countdown countdown = new Countdown(countdownTime, game);
 
   public PanelGame(Game game)
   {
@@ -38,8 +34,6 @@ public class PanelGame extends JPanel implements KeyListener
 
     player[0].setBall(ball);
     player[1].setBall(ball);
-
-    timer = new Timer(); //TODO
 
 
     initPanelGame();
@@ -54,6 +48,18 @@ public class PanelGame extends JPanel implements KeyListener
     this.addKeyListener(this);
   }
 
+  public void score()
+  {
+    //Wenn ein Punkt gemacht wird
+    if(ball.loosePlayer()) //TODO Punktesteigerung des Players
+    {
+      player[0].start();
+      player[1].start();
+      ball.start();
+      countdown.timerNow(); //TODO Timer hört irgendwie nicht auf
+    }
+  }
+
   public void render()
   {
     this.repaint();
@@ -63,51 +69,35 @@ public class PanelGame extends JPanel implements KeyListener
   {
     int direction = 0; // Richtung die der Ball sich bewegen soll
 
-    //Wenn ein Punkt gemacht wird
-    for(int i = 0; i < player.length; i++)
-    {
-      if(ball.loosePlayer(player[i]))
-      {
-        player[i].incrementScore();
-        player[0].start();
-        player[1].start();
-        ball.start();
-        repaint();
-
-        //Delay 3 Seconds
-        try {
-          TimeUnit.SECONDS.sleep(2);
-        }
-        catch (InterruptedException e)
-        {
-          e.printStackTrace();
-        }
-      }
-    }
+    score();
 
     if (ball.checkBorderColission() == true)
     {
       direction = 3;
     }
 
-     else if (ball.checkPaddleColission(player[0]) == true) //Unterer Player
+    else if (ball.checkPaddleColission(player[0]) == true) //Unterer Player
     {
 
       direction = 1;
     }
 
-     else if (ball.checkPaddleColission(player[1]) == true) // Oberer Player
+    else if (ball.checkPaddleColission(player[1]) == true) // Oberer Player
     {
       direction = 2;
     }
 
-
     player[0].updatePosition();
     player[1].updatePosition();
     ball.updatePosition(direction);
-    player[0].move();
-    player[1].move();
-    ball.move();
+
+    if(countdown.isPaused() == false)
+    {
+      player[0].move();
+      player[1].move();
+      ball.move();
+    }
+
 
   }
 
@@ -116,10 +106,15 @@ public class PanelGame extends JPanel implements KeyListener
   {
     super.paint(g);
     player[0].draw(g);
-    player[0].drawScore(g); //TODO
+    player[0].drawScore(g);
     player[1].drawScore(g);
     player[1].draw(g);
     ball.draw(g);
+
+    if(countdown.getCountSek() >= 0)//Draws the Countdown
+    {
+      countdown.draw(g);
+    }
   }
 
   @Override
@@ -131,13 +126,20 @@ public class PanelGame extends JPanel implements KeyListener
   @Override
   public void keyPressed(KeyEvent keyEvent)
   {
-    if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+    if (keyEvent.getKeyCode() == KeyEvent.VK_A)
+    {
       player[0].setLeft(true);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_D) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_D)
+    {
       player[0].setRight(true);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle)
+    {
       player[1].setLeft(true);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle)
+    {
       player[1].setRight(true);
     }
   }
@@ -145,13 +147,20 @@ public class PanelGame extends JPanel implements KeyListener
   @Override
   public void keyReleased(KeyEvent keyEvent)
   {
-    if (keyEvent.getKeyCode() == KeyEvent.VK_A) {
+    if (keyEvent.getKeyCode() == KeyEvent.VK_A)
+    {
       player[0].setLeft(false);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_D) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_D)
+    {
       player[0].setRight(false);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_LEFT && player[1] instanceof Paddle)
+    {
       player[1].setLeft(false);
-    } else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle) {
+    }
+    else if (keyEvent.getKeyCode() == KeyEvent.VK_RIGHT && player[1] instanceof Paddle)
+    {
       player[1].setRight(false);
     }
   }

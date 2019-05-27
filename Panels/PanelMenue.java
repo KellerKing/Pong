@@ -3,6 +3,7 @@
  */
 
 package Panels;
+
 import MiscMain.Game;
 
 import javax.swing.*;
@@ -33,7 +34,7 @@ public class PanelMenue extends JPanel implements ActionListener //TODO booleans
   public void initMenuePanel()
   {
     spielen.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - btnSizeH * 4 / 2, btnSizeW, btnSizeH);
-    beenden.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 + btnSizeH , btnSizeW, btnSizeH);
+    beenden.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 + btnSizeH, btnSizeW, btnSizeH);
     settings.setBounds(Game.GAME_HEIGHT_WIDTH / 2 - btnSizeW / 2, Game.GAME_HEIGHT_WIDTH / 2 - 30, btnSizeW, btnSizeH);
 
     this.add(spielen);
@@ -63,13 +64,16 @@ public class PanelMenue extends JPanel implements ActionListener //TODO booleans
     stoppen = false;
     config = false;
 
-    if (e.getSource().equals(spielen)) {
+    if (e.getSource().equals(spielen))
+    {
       starten = true;
-    } else if (e.getSource().equals(settings)) {
+    }
+    else if (e.getSource().equals(settings))
+    {
       config = true;
     }
     else
-      {
+    {
       stoppen = true;
     }
   }

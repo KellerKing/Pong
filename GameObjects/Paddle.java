@@ -33,7 +33,6 @@ public class Paddle extends Sprite
   @Override
   public void move()
   {
-
     x += vx;
   }
 
@@ -44,7 +43,7 @@ public class Paddle extends Sprite
   }
 
   @Override
-  public void updatePosition() //TODO vereinfachen
+  public void updatePosition() //TODO Prio manchmal bremst er nicht, lässt bicht gegensteuern && vereinfachen
   {
     if (left == true) {
       vx = -speed;
@@ -82,7 +81,7 @@ public class Paddle extends Sprite
 
   }
 
-  public void setScore(int score) {this.score = score;}
+  public void setScore(int score) {this.score = score;} //TODO Score allgemein
 
   public int getScore() { return score; }
 
